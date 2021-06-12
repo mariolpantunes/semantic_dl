@@ -1,8 +1,6 @@
 import nltk
 import glob
-import multiprocessing
 import pandas as pd
-import numpy as np
 import json
 
 from gensim.models import Word2Vec
@@ -27,7 +25,7 @@ setences_path = "processed_setences.json"
 
 if setences_path is not None:
     print('Loading previously generated tokens.')
-    setences_tokens = json.load(open('processed_setences.json'))
+    setences_tokens = json.load(open(setences_path))
     
 else:
     # Read the files in the dataset and create setences
@@ -47,8 +45,6 @@ print('Loading Test Datasets.')
 for f in test_files:
     dataset = pd.read_csv(f, header=None).values
     test_dataset.append(dataset)
-#print(test_dataset)
-#test_examples = pd.concat(test_examples, axis=0).values
 
 if model_path is not None:
     # load model

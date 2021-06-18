@@ -29,20 +29,22 @@ if [ ! -e $PROC_SETENCES ]; then
     python utils/pre_process_w2v.py --dataset $TRAINDIR --destFile $PROC_SETENCES
 fi
 
-for i in {0..2}; do # {1..10} 
-    echo "\n\n Running Experiment $i of 6 \n \n"
+for i in {0..5}; do # {1..10} 
+    echo ""
+    echo "Running Experiment $i of 6"
+    echo ""
 
-    #echo "Running fastText"
-    #(cd fasttext && ./run.sh -r ../"${RESULTDIR}"/fasttext/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$AGR_CORPUS -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]})
+    echo "Running fastText"
+    (cd fasttext && ./run.sh -r ../"${RESULTDIR}"/fasttext/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$AGR_CORPUS -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]})
 
     echo "Running glove"
     (cd glove && ./run.sh -r ../"${RESULTDIR}"/glove/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$AGR_CORPUS -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]})
 
-    #echo "Running word2vec"
-    #(cd word2vec && ./run.sh -r ../"${RESULTDIR}"/word2vec/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]})
-#
-    #echo "Running tf-idf"
-    #(cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/fasttext/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -n ${VECTOR_SIZES[i]})
+    echo "Running word2vec"
+    (cd word2vec && ./run.sh -r ../"${RESULTDIR}"/word2vec/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]})
+  
+    echo "Running tf-idf"
+    (cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/fasttext/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -n ${VECTOR_SIZES[i]})
 done
 
 

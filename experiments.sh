@@ -6,8 +6,8 @@ PROC_SETENCES=dataset/processed_setences.json
 TESTDIR=dataset/test/
 TRAINDIR=dataset/train/
 
-VECTOR_SIZES=(43, 50, 78, 88, 112, 125)
-WINDOW_SIZES=(3, 3, 5, 5, 7, 7)
+VECTOR_SIZES=(43 50 78 88 112 125)
+WINDOW_SIZES=(3 3 5 5 7 7)
 
 RESULTDIR=experiment_results
 

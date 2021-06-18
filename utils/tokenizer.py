@@ -2,6 +2,9 @@ import nltk
 import re
 import string
 
+nltk.download('stopwords')
+
+
 '''
 function for data cleaning and processing
 '''

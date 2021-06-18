@@ -83,7 +83,7 @@ if args.model_path is not None:
 else:
     # train model
     print('Training new model.')
-    model = Word2Vec(setences_tokens, vector_size=int(args.vector_size), window=int(args.window_size), min_count=1, workers=1, sg=1, hs=0, negative=15, epochs=20, seed=17)
+    model = Word2Vec(setences_tokens, vector_size=int(args.vector_size), window=int(args.window_size), min_count=1, workers=4, sg=1, hs=0, negative=15, seed=17)
 
     # store model
     model.save(args.results_path + 'w2v.model')

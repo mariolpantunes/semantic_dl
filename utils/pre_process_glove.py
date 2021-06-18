@@ -1,5 +1,4 @@
 import argparse
-import nltk
 import glob
 import json
 import string
@@ -31,7 +30,6 @@ train_files = glob.glob(args.dataset+'*.csv')
 # Read the files in the dataset and create setences
 print('Generating tokens from files.')
 # Text Mining Pipeline
-stop_words = set(nltk.corpus.stopwords.words('english'))
 aggregated_files = open(args.destFile, "w")
 
 for f in train_files:

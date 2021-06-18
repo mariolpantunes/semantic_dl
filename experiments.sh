@@ -13,6 +13,12 @@ RESULTDIR=experiment_results
 
 mkdir -p "${RESULTDIR}"
 
+if hash python 2>/dev/null; then
+    PYTHON=python
+else
+    PYTHON=python3
+fi
+
 if [ ! -e $AGR_CORPUS ]; then
     echo "Generating Aggregated Corpus for fastText and GloVe"
     python utils/pre_process_glove.py --dataset $TRAINDIR --destFile $AGR_CORPUS

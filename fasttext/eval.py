@@ -1,26 +1,32 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import numpy as np
 import argparse
 import pandas as pd
-import numpy as np 
+import glob
+
 from numpy import dot
 from numpy.linalg import norm
-import glob
 
 from scipy.stats import pearsonr
 
-parser = argparse.ArgumentParser()
+
+#Pearson Correlation Coefficient:  0.682878515021699
+#Pearson Correlation Coefficient:  0.6428373536030053
+
+
+def compat_splitting(line):
+    return line.decode('utf8').split()
+
+parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument(
-    '--vocab_file',
+    '--model',
+    '-m',
+    dest='modelPath',
     action='store',
     required=True,
-    dest='vocab_file',
-    help='File with the complete vocabulary'
-)
-parser.add_argument(
-    '--vectors_file', 
-    required=True,
-    action='store',
-    dest='vectors_file',
-    help='File with the word vectors'
+    help='path to model'
 )
 parser.add_argument(
     '--path',
@@ -41,31 +47,22 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-with open(args.vocab_file, 'r') as f:
-    words = [x.rstrip().split(' ')[0] for x in f.readlines()]
-with open(args.vectors_file, 'r') as f:
-    vectors = {}
-    for line in f:
-        vals = line.rstrip().split(' ')
-        vectors[vals[0]] = [float(x) for x in vals[1:]]
-
-vocab_size = len(words)
-vocab = {w: idx for idx, w in enumerate(words)}
-ivocab = {idx: w for idx, w in enumerate(words)}
-
-vector_dim = len(vectors[ivocab[0]])
-W = np.zeros((vocab_size, vector_dim))
-for word, v in vectors.items():
-    if word == '<unk>':
+vectors = {}
+fin = open(args.modelPath, 'rb')
+for _, line in enumerate(fin):
+    try:
+        tab = compat_splitting(line)
+        vec = np.array(tab[1:], dtype=float)
+        word = tab[0]
+        if np.linalg.norm(vec) == 0:
+            continue
+        if not word in vectors:
+            vectors[word] = vec
+    except ValueError:
         continue
-    W[vocab[word], :] = v
-
-# normalize each word vector to unit length
-W_norm = np.zeros(W.shape)
-d = (np.sum(W ** 2, 1) ** (0.5))
-W_norm = (W.T / d).T
-
-
+    except UnicodeDecodeError:
+        continue
+fin.close()
 
 '''
 Read Files to test for similarities
@@ -79,17 +76,23 @@ for f in test_files:
     dataset = pd.read_csv(f, header=None).values
     test_dataset.append(dataset)
 
+'''
+Testing the model.
+'''
+print('Testing the trained model.')
+
 result = open(args.destFile, 'w')
 
 for d in range(0, len(test_dataset)):
     predictions = []
-
     result.write("---------- " + str(test_files[d]) + " ----------\n")
-    for pair in test_dataset[d]:
-        if pair[0] in vocab and pair[1] in vocab:
 
-            term_1 = W_norm[vocab[pair[0]]]
-            term_2 = W_norm[vocab[pair[1]]]
+    for pair in test_dataset[d]:
+        if pair[0] in vectors and pair[1] in vectors:
+
+            term_1 = vectors[pair[0]]
+            term_2 = vectors[pair[1]]
+
             sim = dot(term_1, term_2)/(norm(term_1)*norm(term_2))
             predictions.append(sim)
             result.write(str(sim) + "\n")
@@ -97,7 +100,8 @@ for d in range(0, len(test_dataset)):
             print("Missing one of the words in the model: ", pair[0], pair[1])
             predictions.append(0.5)
             result.write("0.5\n")
-
+            
     print("Pearson Correlation Coefficient: ", pearsonr(predictions, test_dataset[d][:, 2])[0])
     result.write("Pearson Correlation Coefficient: "+ str(pearsonr(predictions, test_dataset[d][:, 2])[0])+"\n")
     result.write("--------------------\n")
+

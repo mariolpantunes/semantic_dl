@@ -1,9 +1,6 @@
-
 import nltk
-import glob
-import json
-import string
 import re
+import string
 
 '''
 function for data cleaning and processing
@@ -41,19 +38,3 @@ def tokenizer(sentence):
     
     #return tokens
     return tokens
-
-train_files = glob.glob('../dataset/*.csv')
-
-# Read the files in the dataset and create setences
-print('Generating tokens from files.')
-# Text Mining Pipeline
-stop_words = set(nltk.corpus.stopwords.words('english'))
-aggregated_files = open("aggregated_corpus", "w")
-
-for f in train_files:
-    with open(f, 'rt', newline='', encoding='utf-8') as f:
-        snippets = f.readlines()
-        for s in snippets:
-            for token in tokenizer(s):
-                aggregated_files.write(token+" ")
-

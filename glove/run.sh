@@ -1,36 +1,64 @@
 #!/bin/bash
-set -e
 
-CORPUS=aggregated_corpus
-VOCAB_FILE=vocab.txt
-COOCCURRENCE_FILE=cooccurrence.bin
-COOCCURRENCE_SHUF_FILE=cooccurrence.shuf.bin
-BUILDDIR=glove-build
-SAVE_FILE=vectors
+while [[ $# -gt 0 ]]; do
+  key="$1"
+
+  case $key in
+    -r|--resultdir)
+      RESULTDIR="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -t|--testdir)
+      TESTDIR="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -c|--corpus)
+      CORPUS="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -d|--dim)
+      VECTOR_SIZE="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -w|--window_size)
+      WINDOW_SIZE="$2"
+      shift # past argument
+      shift # past value
+      ;;
+  esac
+done
+
+mkdir -p "${RESULTDIR}"
+
+NUM_THREADS=4
+
+VOCAB_FILE="${RESULTDIR}"vocab.txt
+COOCCURRENCE_FILE="${RESULTDIR}"cooccurrence.bin
+COOCCURRENCE_SHUF_FILE="${RESULTDIR}"cooccurrence.shuf.bin
+SAVE_FILE="${RESULTDIR}"vectors
+
 VERBOSE=2
 MEMORY=4.0
-VOCAB_MIN_COUNT=5
-VECTOR_SIZE=50
-MAX_ITER=15
-WINDOW_SIZE=15
+VOCAB_MIN_COUNT=1
+MAX_ITER=20
 BINARY=2
-NUM_THREADS=8
 X_MAX=10
-if hash python 2>/dev/null; then
-    PYTHON=python
-else
-    PYTHON=python3
-fi
 
-echo
-echo "$ $BUILDDIR/vocab_count -min-count $VOCAB_MIN_COUNT -verbose $VERBOSE < $CORPUS > $VOCAB_FILE"
-$BUILDDIR/vocab_count -min-count $VOCAB_MIN_COUNT -verbose $VERBOSE < $CORPUS > $VOCAB_FILE
-echo "$ $BUILDDIR/cooccur -memory $MEMORY -vocab-file $VOCAB_FILE -verbose $VERBOSE -window-size $WINDOW_SIZE < $CORPUS > $COOCCURRENCE_FILE"
-$BUILDDIR/cooccur -memory $MEMORY -vocab-file $VOCAB_FILE -verbose $VERBOSE -window-size $WINDOW_SIZE < $CORPUS > $COOCCURRENCE_FILE
-echo "$ $BUILDDIR/shuffle -memory $MEMORY -verbose $VERBOSE < $COOCCURRENCE_FILE > $COOCCURRENCE_SHUF_FILE"
-$BUILDDIR/shuffle -memory $MEMORY -verbose $VERBOSE < $COOCCURRENCE_FILE > $COOCCURRENCE_SHUF_FILE
-echo "$ $BUILDDIR/glove -save-file $SAVE_FILE -threads $NUM_THREADS -input-file $COOCCURRENCE_SHUF_FILE -x-max $X_MAX -iter $MAX_ITER -vector-size $VECTOR_SIZE -binary $BINARY -vocab-file $VOCAB_FILE -verbose $VERBOSE"
-$BUILDDIR/glove -save-file $SAVE_FILE -threads $NUM_THREADS -input-file $COOCCURRENCE_SHUF_FILE -x-max $X_MAX -iter $MAX_ITER -vector-size $VECTOR_SIZE -binary $BINARY -vocab-file $VOCAB_FILE -verbose $VERBOSE
+echo "$ ./vocab_count -min-count $VOCAB_MIN_COUNT -verbose $VERBOSE < $CORPUS > $VOCAB_FILE"
+./vocab_count -min-count $VOCAB_MIN_COUNT -verbose $VERBOSE < $CORPUS > $VOCAB_FILE
 
-echo "$ $PYTHON evaluation.py"
-$PYTHON evaluation.py
+echo "$ ./cooccur -memory $MEMORY -vocab-file $VOCAB_FILE -verbose $VERBOSE -window-size $WINDOW_SIZE < $CORPUS > $COOCCURRENCE_FILE"
+./cooccur -memory $MEMORY -vocab-file $VOCAB_FILE -verbose $VERBOSE -window-size $WINDOW_SIZE < $CORPUS > $COOCCURRENCE_FILE
+
+echo "$ ./shuffle -memory $MEMORY -verbose $VERBOSE < $COOCCURRENCE_FILE > $COOCCURRENCE_SHUF_FILE"
+./shuffle -memory $MEMORY -verbose $VERBOSE < $COOCCURRENCE_FILE > $COOCCURRENCE_SHUF_FILE
+
+echo "$ ./glove -save-file $SAVE_FILE -threads $NUM_THREADS -input-file $COOCCURRENCE_SHUF_FILE -x-max $X_MAX -iter $MAX_ITER -vector-size $VECTOR_SIZE -binary $BINARY -vocab-file $VOCAB_FILE -verbose $VERBOSE"
+./glove -save-file $SAVE_FILE -threads $NUM_THREADS -input-file $COOCCURRENCE_SHUF_FILE -x-max $X_MAX -iter $MAX_ITER -vector-size $VECTOR_SIZE -binary $BINARY -vocab-file $VOCAB_FILE -verbose $VERBOSE
+
+echo "$ python evaluation.py"
+python evaluation.py --vocab_file $VOCAB_FILE --vectors_file "${SAVE_FILE}".txt -p $TESTDIR -d "${RESULTDIR}"/results.txt

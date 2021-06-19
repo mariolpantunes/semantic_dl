@@ -44,7 +44,7 @@ for i in {0..5}; do # {1..10}
     (cd word2vec && ./run.sh -r ../"${RESULTDIR}"/word2vec/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]})
   
     echo "Running tf-idf"
-    (cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/fasttext/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -n ${VECTOR_SIZES[i]})
+    (cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/tf-idf/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -n ${VECTOR_SIZES[i]})
 done
 
 

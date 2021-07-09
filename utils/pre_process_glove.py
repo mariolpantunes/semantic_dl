@@ -1,8 +1,5 @@
 import argparse
 import glob
-import json
-import string
-import re
 
 from tokenizer import tokenizer
 

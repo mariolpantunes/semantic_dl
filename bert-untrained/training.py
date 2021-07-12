@@ -8,6 +8,7 @@ from transformers import RobertaForMaskedLM
 from transformers import LineByLineTextDataset
 from transformers import DataCollatorForLanguageModeling
 from transformers import Trainer, TrainingArguments
+from transformers import pipeline
 
 
 ### Train tokenizer from scratch
@@ -17,7 +18,7 @@ tokenizer = ByteLevelBPETokenizer()
 
 tokenizer.train(files=paths, min_frequency=1, special_tokens=["<s>", "<pad>", "</s>", "<unk>", "<mask>"])
 
-tokenizer.save_model("EsperBERTo")
+tokenizer.save_model("model")
 
 #tokenizer = ByteLevelBPETokenizer(
 #    "./EsperBERTo/vocab.json",
@@ -40,13 +41,13 @@ config = RobertaConfig(
     type_vocab_size=1,
 )
 
-tokenizer = RobertaTokenizerFast.from_pretrained("./EsperBERTo", max_len=512)
+tokenizer = RobertaTokenizerFast.from_pretrained("./model", max_len=512)
 
 model = RobertaForMaskedLM(config=config)
 
 
 
-#### Generate dataset for training
+#### Generate dataset for training ------- NEEDS TO BE UPDATED TO NEW VERSION --------
 dataset = LineByLineTextDataset(
     tokenizer=tokenizer,
     file_path="../dataset/aggregated_corpus",
@@ -58,10 +59,10 @@ data_collator = DataCollatorForLanguageModeling(
 )
 
 training_args = TrainingArguments(
-    output_dir="./EsperBERTo",
+    output_dir="./model",
     overwrite_output_dir=True,
-    num_train_epochs=1,
-    per_gpu_train_batch_size=64,
+    num_train_epochs=1000,
+    per_gpu_train_batch_size=20,
     save_steps=10_000,
     save_total_limit=2,
     prediction_loss_only=True,
@@ -76,4 +77,12 @@ trainer = Trainer(
 
 trainer.train()
 
-trainer.save_model("./EsperBERTo")
+trainer.save_model("./model")
+
+nlp = pipeline(
+    "feature-extraction",
+    model="./model",
+    tokenizer="./model",
+)
+
+print(nlp("car"))

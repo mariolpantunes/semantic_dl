@@ -3,6 +3,7 @@
 
 AGR_CORPUS=dataset/aggregated_corpus
 PROC_SETENCES=dataset/processed_setences.json
+SPACY_CORPUS=dataset/aggregated_corpus.jsonl
 TESTDIR=dataset/test/
 TRAINDIR=dataset/train/
 
@@ -28,6 +29,10 @@ if [ ! -e $PROC_SETENCES ]; then
     echo "Generating Aggregated Corpus for Word2Vec and TF-IDF"
     python utils/pre_process_w2v.py --dataset $TRAINDIR --destFile $PROC_SETENCES
 fi
+if [ ! -e $SPACY_CORPUS ]; then
+    echo "Generating Aggregated Corpus for Word2Vec and TF-IDF"
+    python utils/pre_process_spacy.py --dataset $TRAINDIR --destFile $SPACY_CORPUS
+fi
 
 for i in {0..5}; do # {1..10} 
     echo ""
@@ -45,6 +50,9 @@ for i in {0..5}; do # {1..10}
   
     echo "Running tf-idf"
     (cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/tf-idf/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -n ${VECTOR_SIZES[i]})
+
+    echo "Running spacy"
+    (cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/spacy/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$SPACY_CORPUS --config config.cfg
 done
 
 

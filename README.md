@@ -10,6 +10,3 @@
     - $ cd fastText-0.9.2
     - $ make 
 - move the binary file "fasttext" to the fasttext folder (mv fastText-0.9.2/fasttext fasttext/) 
-- python -m pip install pandas==1.2.4
-- python -m pip install gensim==4.0.1
-- python -m pip install nltk==3.6.2

@@ -30,7 +30,7 @@ if [ ! -e $PROC_SETENCES ]; then
     python utils/pre_process_w2v.py --dataset $TRAINDIR --destFile $PROC_SETENCES
 fi
 if [ ! -e $SPACY_CORPUS ]; then
-    echo "Generating Aggregated Corpus for Word2Vec and TF-IDF"
+    echo "Generating Aggregated Corpus for Spacy"
     python utils/pre_process_spacy.py --dataset $TRAINDIR --destFile $SPACY_CORPUS
 fi
 
@@ -39,20 +39,20 @@ for i in {0..5}; do # {1..10}
     echo "Running Experiment $i of 6"
     echo ""
 
-    echo "Running fastText"
-    (cd fasttext && ./run.sh -r ../"${RESULTDIR}"/fasttext/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$AGR_CORPUS -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]})
-
-    echo "Running glove"
-    (cd glove && ./run.sh -r ../"${RESULTDIR}"/glove/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$AGR_CORPUS -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]})
-
-    echo "Running word2vec"
-    (cd word2vec && ./run.sh -r ../"${RESULTDIR}"/word2vec/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]})
-  
-    echo "Running tf-idf"
-    (cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/tf-idf/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -n ${VECTOR_SIZES[i]})
-
-    echo "Running spacy"
-    (cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/spacy/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$SPACY_CORPUS --config config.cfg
+    #echo "Running fastText"
+    #(cd fasttext && ./run.sh -r ../"${RESULTDIR}"/fasttext/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$AGR_CORPUS -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]})
+#
+    #echo "Running glove"
+    #(cd glove && ./run.sh -r ../"${RESULTDIR}"/glove/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$AGR_CORPUS -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]})
+#
+    #echo "Running word2vec"
+    #(cd word2vec && ./run.sh -r ../"${RESULTDIR}"/word2vec/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]})
+  #
+    #echo "Running tf-idf"
+    #(cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/tf-idf/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -n ${VECTOR_SIZES[i]})
 done
+
+echo "Running spacy"
+    (cd spacy && ./run.sh -r ../"${RESULTDIR}"/spacy/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}" -t ../$TESTDIR -c ../$SPACY_CORPUS --config config.cfg)
 
 

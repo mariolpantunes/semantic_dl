@@ -69,7 +69,7 @@ for d in range(0, len(test_dataset)):
         doc1 = nlp(pair[0])
         doc2 = nlp(pair[1])
         if doc1[0].has_vector and doc2[0].has_vector:
-
+            #Try wiht doc1[0].similarity(doc2[0])
             term_1 = doc1[0].vector
             term_2 = doc2[0].vector
             

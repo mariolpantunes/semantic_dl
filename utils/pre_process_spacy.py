@@ -30,4 +30,7 @@ aggregated_files = open(args.destFile, "w")
 
 for f in train_files:
     with open(f, 'rt', newline='', encoding='utf-8') as f:
-        aggregated_files.write(json.dumps({"text": f.read().replace("\n", " ").replace("\t", " ").replace("\"", "'").strip() })+"\n")
+        for line in f.readlines():
+            sentences = line.split(".")
+            for sentence in sentences:
+                aggregated_files.write(json.dumps({"text": sentence.replace("\n", ".").replace("\t", ".").replace("\"", "'").strip() + "." })+"\n")

@@ -102,5 +102,3 @@ nlp = pipeline(
     model="./model",
     tokenizer="./model",
 )
-
-print(nlp("car"))

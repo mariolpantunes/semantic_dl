@@ -34,7 +34,7 @@ if [ ! -e $SPACY_CORPUS ]; then
     python utils/pre_process_spacy.py --dataset $TRAINDIR --destFile $SPACY_CORPUS
 fi
 
-for i in {0..5}; do # {1..10} 
+for i in {1..6}; do # {1..10} 
     echo ""
     echo "Running Experiment $i of 6"
     echo ""
@@ -50,9 +50,11 @@ for i in {0..5}; do # {1..10}
   #
     #echo "Running tf-idf"
     #(cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/tf-idf/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -n ${VECTOR_SIZES[i]})
+
+    echo "Running spacy"
+    (cd spacy && ./run.sh -r ../"${RESULTDIR}"/spacy/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}" -t ../$TESTDIR -c ../$SPACY_CORPUS --config configs/config_"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"-cfg)
 done
 
-echo "Running spacy"
-    (cd spacy && ./run.sh -r ../"${RESULTDIR}"/spacy/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}" -t ../$TESTDIR -c ../$SPACY_CORPUS --config config.cfg)
+
 
 

@@ -3,6 +3,7 @@ import pandas as pd
 import argparse
 
 from gensim.models import Word2Vec
+import gensim.downloader as api
 from scipy.stats import pearsonr
 
 parser = argparse.ArgumentParser()
@@ -53,7 +54,7 @@ Loading/ Training the model.
 # load model
 print('Loading previously trained model.')
 if args.model_path == "pretrained":
-    model = Word2Vec.load(args.model_path)
+    model = api.load("word2vec-google-news-300")
 else:
     model = Word2Vec.load(args.model_path).wv
 
@@ -68,7 +69,7 @@ for d in range(0, len(test_dataset)):
     result.write("---------- " + str(test_files[d]) + " ----------\n")
     for pair in test_dataset[d]:
         if pair[0] in model and pair[1] in model:
-            sim = model.wv.similarity(pair[0], pair[1])
+            sim = model.similarity(pair[0], pair[1])
             predictions.append(sim)
             result.write(str(sim) + "\n")
         else:

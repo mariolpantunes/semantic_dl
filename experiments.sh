@@ -13,7 +13,7 @@ TRAINDIR=dataset/train/
 VECTOR_SIZES=(43 50 78 88 112 125)
 WINDOW_SIZES=(3 3 5 5 7 7)
 BERT_VECTORS=(36 48 72 84 108 120)
-
+GLOVE_VECTORS=(50 100 200 300)
 RESULTDIR=experiment_results
 
 mkdir -p "${RESULTDIR}"
@@ -66,26 +66,34 @@ done
 
 echo "Running pre-trained models"
 
-echo "Running bert"
-(cd sbert && ./run.sh -r ../"${RESULTDIR}"/bert/pretrained -t ../"${TESTDIR}" -o 2)
+#echo "Running bert"
+#(cd sbert && ./run.sh -r ../"${RESULTDIR}"/bert/pretrained -t ../"${TESTDIR}" -o 2)
+#
+#echo "Running spacy"
+#(cd spacy && ./run.sh -r ../"${RESULTDIR}"/spacy/pretrained -t ../"${TESTDIR}" -o 2)
+#
+#echo "Running fastText"
+#(cd fasttext && ./run.sh -r ../"${RESULTDIR}"/fasttext/pretrained -t ../"${TESTDIR}" -o 2)
 
-echo "Running spacy"
-(cd spacy && ./run.sh -r ../"${RESULTDIR}"/spacy/pretrained -t ../"${TESTDIR}" -o 2)
 
-echo "Running fastText"
-(cd fasttext && ./run.sh -r ../"${RESULTDIR}"/fasttext/pretrained -t ../"${TESTDIR}" -o 2)
+for i in {0..3}; do # {1..10} 
+    echo ""
+    echo "Running Experiment $(( $i + 1 )) of 4"
+    echo ""
 
-echo "Running glove"
-(cd glove && ./run.sh -r ../"${RESULTDIR}"/glove/pretrained -t ../"${TESTDIR}" -o 2)
+    #echo "Running glove"
+    #(cd glove && ./run.sh -r ../"${RESULTDIR}"/glove/"${GLOVE_VECTORS[i]}"/ -t ../$TESTDIR -d ${GLOVE_VECTORS[i]} -o 2)
 
-echo "Running word2vec"
-(cd word2vec && ./run.sh -r ../"${RESULTDIR}"/word2vec/pretrained -t ../$TESTDIR -o 2)
+done
+
+#echo "Running word2vec"
+#(cd word2vec && ./run.sh -r ../"${RESULTDIR}"/word2vec/pretrained -t ../"${TESTDIR}" -o 2)
 
 
 echo "Running online models"
 
-echo "Running bert"
-(cd sbert && ./run.sh -r ../"${RESULTDIR}"/bert/online/ -t ../"${TESTDIR}" -c ../"${BERT_CORPUS}" -d ../"${BERT_DEV_CORPUS}" -v ${BERT_VECTORS[i]} -s ../"${SUP_TRAIN}" -o 3)
+#echo "Running bert"
+#(cd sbert && ./run.sh -r ../"${RESULTDIR}"/bert/online/ -t ../"${TESTDIR}" -c ../"${BERT_CORPUS}" -d ../"${BERT_DEV_CORPUS}" -v ${BERT_VECTORS[i]} -s ../"${SUP_TRAIN}" -o 3)
     
 
 

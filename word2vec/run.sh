@@ -39,8 +39,6 @@ done
 
 mkdir -p "${RESULTDIR}"
 
-python word2vec.py --train_input $CORPUS --test_input $TESTDIR --outputFolder $RESULTDIR --vector_size $VECTOR_SIZE --window_size $WINDOW_SIZE
-
 if [ $OPTION -eq 1 ]
 then
 
@@ -53,8 +51,9 @@ python eval.py --test_input $TESTDIR --outputFolder "${RESULTDIR}"/results.txt -
 fi
 
 if [ $OPTION -eq 2 ]
+then
 
 echo "Evaluating pretrained model"
-python eval.py --test_input $TESTDIR --outputFolder "${RESULTDIR}"/results.txt -w pretrained
+python eval.py --test_input $TESTDIR --outputFile "${RESULTDIR}"/results.txt -w pretrained
 
 fi

@@ -52,8 +52,9 @@ python eval.py -m "${RESULTDIR}"/model/ -p $TESTDIR -d "${RESULTDIR}"/results.tx
 fi
 
 if [ $OPTION -eq 2 ]
+then
 
 echo "Evaluating the model with the tok2vec pretraining"
 python eval.py -m en_core_web_lg -p $TESTDIR -d "${RESULTDIR}"/results.txt
 
-then
+fi

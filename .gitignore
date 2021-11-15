@@ -1,4 +1,5 @@
 dataset
+experiment_results
 .vscode
 w2v.*
 *.json

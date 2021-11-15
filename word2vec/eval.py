@@ -1,6 +1,5 @@
 import glob
 import pandas as pd
-import json
 import argparse
 
 from gensim.models import Word2Vec
@@ -18,14 +17,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--train_input',
-    dest='setences_path',
-    action='store',
-    required=True,
-    help='File containing the train examples'
-)
-
-parser.add_argument(
     '--test_input',
     dest='testFolder',
     action='store',
@@ -34,24 +25,9 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--outputFolder',
+    '--outputFile',
     '-o',
     dest='results_path',
-    action='store',
-    required=True,
-    help='Path to store results'
-)
-parser.add_argument(
-    '--vector_size',
-    '-v',
-    dest='vector_size',
-    action='store',
-    required=True,
-    help='Path to store results'
-)
-parser.add_argument(
-    '--window_size',
-    dest='window_size',
     action='store',
     required=True,
     help='Path to store results'
@@ -59,8 +35,6 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-print('Loading previously generated tokens.')
-setences_tokens = json.load(open(args.setences_path))
 
 '''
 Read Files to test for similarities
@@ -76,32 +50,24 @@ for f in test_files:
 '''
 Loading/ Training the model.
 '''
-if args.model_path is not None:
-    # load model
-    print('Loading previously trained model.')
+# load model
+print('Loading previously trained model.')
+if args.model_path == "pretrained":
     model = Word2Vec.load(args.model_path)
 else:
-    # train model
-    print('Training new model.')
-    model = Word2Vec(setences_tokens, vector_size=int(args.vector_size), window=int(args.window_size), min_count=1, workers=4, sg=1, hs=0, negative=15, seed=17)
-
-    # store model
-    model.save(args.results_path + 'w2v.model')
-
-words_seen_by_model = set(model.wv.index_to_key)
-
+    model = Word2Vec.load(args.model_path).wv
 
 '''
 Testing the model.
 '''
 print('Testing the trained model.')
-result = open(args.results_path + 'results.txt', 'w')
+result = open(args.results_path, 'w')
 
 for d in range(0, len(test_dataset)):
     predictions = []
     result.write("---------- " + str(test_files[d]) + " ----------\n")
     for pair in test_dataset[d]:
-        if pair[0] in words_seen_by_model and pair[1] in words_seen_by_model:
+        if pair[0] in model and pair[1] in model:
             sim = model.wv.similarity(pair[0], pair[1])
             predictions.append(sim)
             result.write(str(sim) + "\n")

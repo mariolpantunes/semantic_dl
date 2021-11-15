@@ -29,6 +29,11 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
+    -o|--option)
+      OPTION="$2"
+      shift # past argument
+      shift # past value
+      ;;
   esac
 done
 
@@ -48,6 +53,9 @@ MAX_ITER=20
 BINARY=2
 X_MAX=10
 
+if [ $OPTION -eq 1 ]
+then
+
 echo "$ ./vocab_count -min-count $VOCAB_MIN_COUNT -verbose $VERBOSE < $CORPUS > $VOCAB_FILE"
 ./vocab_count -min-count $VOCAB_MIN_COUNT -verbose $VERBOSE < $CORPUS > $VOCAB_FILE
 
@@ -61,4 +69,14 @@ echo "$ ./glove -save-file $SAVE_FILE -threads $NUM_THREADS -input-file $COOCCUR
 ./glove -save-file $SAVE_FILE -threads $NUM_THREADS -input-file $COOCCURRENCE_SHUF_FILE -x-max $X_MAX -iter $MAX_ITER -vector-size $VECTOR_SIZE -binary $BINARY -vocab-file $VOCAB_FILE -verbose $VERBOSE
 
 echo "$ python evaluation.py"
-python evaluation.py --vocab_file $VOCAB_FILE --vectors_file "${SAVE_FILE}".txt -p $TESTDIR -d "${RESULTDIR}"/results.txt
+python eval.py --vectors_file "${SAVE_FILE}".txt -p $TESTDIR -d "${RESULTDIR}"/results.txt
+
+fi
+
+if [ $OPTION -eq 2 ]
+then
+
+echo "$ python evaluation.py"
+python eval.py --vectors_file ./pre_trained/glove.6B."${VECTOR_SIZE}"d.txt -p $TESTDIR -d "${RESULTDIR}"/results.txt
+
+fi

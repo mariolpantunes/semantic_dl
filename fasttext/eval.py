@@ -1,23 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import numpy as np
 import argparse
 import pandas as pd
 import glob
+import io
 
 from numpy import dot
 from numpy.linalg import norm
 
 from scipy.stats import pearsonr
-
-
-#Pearson Correlation Coefficient:  0.682878515021699
-#Pearson Correlation Coefficient:  0.6428373536030053
-
-
-def compat_splitting(line):
-    return line.decode('utf8').split()
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument(
@@ -47,22 +39,16 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-vectors = {}
-fin = open(args.modelPath, 'rb')
-for _, line in enumerate(fin):
-    try:
-        tab = compat_splitting(line)
-        vec = np.array(tab[1:], dtype=float)
-        word = tab[0]
-        if np.linalg.norm(vec) == 0:
-            continue
-        if not word in vectors:
-            vectors[word] = vec
-    except ValueError:
-        continue
-    except UnicodeDecodeError:
-        continue
-fin.close()
+def load_vectors(fname):
+    fin = io.open(fname, 'r', encoding='utf-8', newline='\n', errors='ignore')
+    data = {}
+    for line in fin:
+        tokens = line.rstrip().split(' ')
+        data[tokens[0]] = [float(x) for x in  tokens[1:]]
+    
+    return data
+
+vectors = load_vectors(args.modelPath)
 
 '''
 Read Files to test for similarities

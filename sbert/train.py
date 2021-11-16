@@ -45,6 +45,6 @@ train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=16)
 train_loss = losses.CosineSimilarityLoss(model)
 
 #Tune the model
-model.fit(train_objectives=[(train_dataloader, train_loss)], epochs=1, warmup_steps=100)
+model.fit(train_objectives=[(train_dataloader, train_loss)], epochs=100, warmup_steps=100)
 
 model.save(args.destPath)

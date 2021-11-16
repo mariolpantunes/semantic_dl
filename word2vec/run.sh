@@ -37,7 +37,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-mkdir -p "${RESULTDIR}"
+mkdir -p "${RESULTDIR}"/model
 
 if [ $OPTION -eq 1 ]
 then

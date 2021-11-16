@@ -46,7 +46,7 @@ echo "Training model from scratch"
 python train.py --train_input $CORPUS --outputFolder "${RESULTDIR}"/model/ --vector_size $VECTOR_SIZE --window_size $WINDOW_SIZE
 
 echo "Evaluating model"
-python eval.py --test_input $TESTDIR --outputFolder "${RESULTDIR}"/results.txt -w "${RESULTDIR}"/model/w2v.model
+python eval.py --test_input $TESTDIR --outputFile "${RESULTDIR}"/results.txt -w "${RESULTDIR}"/model/w2v.model
 
 fi
 

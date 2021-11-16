@@ -63,6 +63,6 @@ if [ $OPTION -eq 2 ]
 then
 
 echo "Evaluating Model"
-python eval.py -m ./pre_trained/pretrained.vec -p $TESTDIR -d "${RESULTDIR}"/results.txt
+python eval.py -m ./pre-trained/pretrained.vec -p $TESTDIR -d "${RESULTDIR}"/results.txt
 
 fi

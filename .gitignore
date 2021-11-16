@@ -1,5 +1,8 @@
 dataset
 experiment_results
+fasttext/pre-trained/
+glove/pre-trained/
+fasttext/fasttext
 .vscode
 w2v.*
 *.json

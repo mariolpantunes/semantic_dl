@@ -10,3 +10,13 @@
     - $ cd fastText-0.9.2
     - $ make 
 - move the binary file "fasttext" to the fasttext folder (mv fastText-0.9.2/fasttext fasttext/) 
+- Download dataset for similarity https://raw.githubusercontent.com/AlexGrinch/ro_sgns/master/datasets/rg65.csv
+    - put it in dataset/train_sim/
+- Download pretrained fasttext https://dl.fbaipublicfiles.com/fasttext/vectors-english/wiki-news-300d-1M.vec.zip
+    - put it in fasttext/pre-trained/
+    - rename it pretrained.vec
+- Download pretrained glove https://nlp.stanford.edu/data/glove.6B.zip
+    - put it in glove/pre-trained/
+
+- Download spacy pretrained model
+    - python -m spacy download en_core_web_lg

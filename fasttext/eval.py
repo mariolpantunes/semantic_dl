@@ -11,7 +11,7 @@ from numpy.linalg import norm
 
 from scipy.stats import pearsonr
 
-parser = argparse.ArgumentParser(description='Process some integers.')
+parser = argparse.ArgumentParser()
 parser.add_argument(
     '--model',
     '-m',
@@ -41,6 +41,7 @@ args = parser.parse_args()
 
 def load_vectors(fname):
     fin = io.open(fname, 'r', encoding='utf-8', newline='\n', errors='ignore')
+    fin.readline()
     data = {}
     for line in fin:
         tokens = line.rstrip().split(' ')

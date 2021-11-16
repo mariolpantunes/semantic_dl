@@ -77,6 +77,6 @@ if [ $OPTION -eq 2 ]
 then
 
 echo "$ python evaluation.py"
-python eval.py --vectors_file ./pre_trained/glove.6B."${VECTOR_SIZE}"d.txt -p $TESTDIR -d "${RESULTDIR}"/results.txt
+python eval.py --vectors_file ./pre-trained/glove.6B."${VECTOR_SIZE}"d.txt -p $TESTDIR -d "${RESULTDIR}"/results.txt
 
 fi

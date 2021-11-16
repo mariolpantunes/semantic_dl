@@ -38,7 +38,7 @@ model = SentenceTransformer(args.modelPath)
 
 training_file = pd.read_csv(args.trainFile, sep=";", header=None)
 
-train_examples = [ InputExample(texts=[x[0], x[1]], label=x[3]) for x in training_file.to_numpy()]
+train_examples = [ InputExample(texts=[x[0], x[1]], label=x[2]/5) for x in training_file.to_numpy()]
 
 #Define your train dataset, the dataloader and the train loss
 train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=16)

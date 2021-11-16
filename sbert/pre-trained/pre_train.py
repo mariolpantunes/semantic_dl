@@ -41,7 +41,7 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-per_device_train_batch_size = 32
+per_device_train_batch_size = 24
 
 save_steps = 1000               #Save model every 1k steps
 num_train_epochs = 1            #Number of epochs

@@ -1,8 +1,6 @@
 import argparse
 import glob
 
-from tokenizer import tokenizer
-
 parser = argparse.ArgumentParser()
 
 parser.add_argument(

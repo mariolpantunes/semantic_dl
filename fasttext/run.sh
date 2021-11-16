@@ -66,3 +66,17 @@ echo "Evaluating Model"
 python eval.py -m ./pre-trained/pretrained.vec -p $TESTDIR -d "${RESULTDIR}"/results.txt
 
 fi
+
+if [ $OPTION -eq 3 ]
+then
+
+python generate_queries.py -p $TESTDIR -d $QUERIES
+
+./fasttext skipgram -input $CORPUS -output "${RESULTDIR}"/model -dim 300 -minCount 1 -thread $THREADS -pretrainedVectors ./pre-trained/pretrained.vec
+
+cat $QUERIES | ./fasttext print-word-vectors "${RESULTDIR}"/model.bin > "${RESULTDIR}"/vectors.txt
+
+echo "Evaluating Model"
+python eval.py -m "${RESULTDIR}"/model.vec -p $TESTDIR -d "${RESULTDIR}"/results.txt
+
+fi

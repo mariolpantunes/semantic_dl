@@ -95,8 +95,8 @@ done
 
 echo "Running online models"
 
-echo "Running bert"
-(cd sbert && ./run.sh -r ../"${RESULTDIR}"/bert/online -t ../"${TESTDIR}" -c ../"${BERT_CORPUS}" -d ../"${BERT_DEV_CORPUS}" -v ${BERT_VECTORS[i]} -s ../"${SUP_TRAIN}" -o 3)
+#echo "Running bert"
+#(cd sbert && ./run.sh -r ../"${RESULTDIR}"/bert/online -t ../"${TESTDIR}" -c ../"${BERT_CORPUS}" -d ../"${BERT_DEV_CORPUS}" -v ${BERT_VECTORS[i]} -s ../"${SUP_TRAIN}" -o 3)
     
-
-
+#echo "Running fastText"
+(cd fasttext && ./run.sh -r ../"${RESULTDIR}"/fasttext/online -t ../$TESTDIR -c ../$AGR_CORPUS -o 3)

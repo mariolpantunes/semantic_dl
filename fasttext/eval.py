@@ -85,10 +85,13 @@ for d in range(0, len(test_dataset)):
             result.write(str(sim) + "\n")
         else:
             print("Missing one of the words in the model: ", pair[0], pair[1])
-            predictions.append(0.5)
-            result.write("0.5\n")
+            predictions.append(None)
+            result.write("None\n")
+
+    test_removed = [ x for i, x in enumerate(test_dataset[d][:, 2]) if predictions[i]]
+    predictions_removed = [ x for x in predictions if x] 
             
-    print("Pearson Correlation Coefficient: ", pearsonr(predictions, test_dataset[d][:, 2])[0])
-    result.write("Pearson Correlation Coefficient: "+ str(pearsonr(predictions, test_dataset[d][:, 2])[0])+"\n")
+    print("Pearson Correlation Coefficient: ", pearsonr(test_removed, predictions_removed)[0])
+    result.write("Pearson Correlation Coefficient: "+ str(pearsonr(test_removed, predictions_removed)[0])+"\n")
     result.write("--------------------\n")
 

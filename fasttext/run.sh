@@ -39,7 +39,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 QUERIES="${RESULTDIR}"/queries.txt
-THREADS=4
+THREADS=20
 
 mkdir -p "${RESULTDIR}"
 

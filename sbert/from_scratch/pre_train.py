@@ -53,7 +53,7 @@ args = parser.parse_args()
 per_device_train_batch_size = 32
 
 save_steps = 1000               #Save model every 1k steps
-num_train_epochs = 1            #Number of epochs
+num_train_epochs = 5            #Number of epochs
 use_fp16 = False                #Set to True, if your GPU supports FP16 operations
 max_length = 100                #Max length for a text input
 do_whole_word_mask = False      #If set to true, whole words are masked

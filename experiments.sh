@@ -58,11 +58,11 @@ for i in {0..5}; do # {1..10}
     #echo "Running word2vec"
     #(cd word2vec && ./run.sh -r ../"${RESULTDIR}"/word2vec/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}" -t ../$TESTDIR -c ../$PROC_SETENCES -d ${VECTOR_SIZES[i]} -w ${WINDOW_SIZES[i]} -o 1)
 
-    echo "Running tf-idf"
-    (cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/tf-idf/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -n ${VECTOR_SIZES[i]})
+    #echo "Running tf-idf"
+    #(cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/tf-idf/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -n ${VECTOR_SIZES[i]})
 
-    #echo "Running spacy"
-    #(cd spacy && ./run.sh -r ../"${RESULTDIR}"/spacy/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}" -t ../$TESTDIR -c ../$SPACY_CORPUS --config configs/config_"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}".cfg -o 1)
+    echo "Running spacy"
+    (cd spacy && ./run.sh -r ../"${RESULTDIR}"/spacy/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}" -t ../$TESTDIR -c ../$SPACY_CORPUS --config configs/config_"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}".cfg -o 1)
 
     #echo "Running bert"
     #(cd sbert && ./run.sh -r ../"${RESULTDIR}"/bert/"${BERT_VECTORS[i]}" -t ../"${TESTDIR}" -c ../"${BERT_CORPUS}" -p ../"${TRAINDIR}" -d ../"${BERT_DEV_CORPUS}" -v ${BERT_VECTORS[i]} -s ../"${SUP_TRAIN}" -o 1)

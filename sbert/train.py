@@ -36,9 +36,9 @@ args = parser.parse_args()
 #Define the model. Either from scratch of by loading a pre-trained model
 model = SentenceTransformer(args.modelPath)
 
-training_file = pd.read_csv(args.trainFile, sep=";", header=None)
+training_file = pd.read_csv(args.trainFile, sep=",", header=None)
 
-train_examples = [ InputExample(texts=[x[0], x[1]], label=x[2]/5) for x in training_file.to_numpy()]
+train_examples = [ InputExample(texts=[x[0], x[1]], label=x[2]/10) for x in training_file.to_numpy()]
 
 #Define your train dataset, the dataloader and the train loss
 train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=16)

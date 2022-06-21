@@ -1,5 +1,6 @@
 import argparse
 import glob
+import time
 
 parser = argparse.ArgumentParser()
 
@@ -25,6 +26,14 @@ parser.add_argument(
     help='File that stores the dev'
 )
 
+parser.add_argument(
+    '-r',
+    dest='resultFile',
+    action='store',
+    required=True,
+    help='File that stores the execution time'
+)
+
 args = parser.parse_args()
 
 train_files = glob.glob(args.dataset+'*.csv')
@@ -32,6 +41,7 @@ train_files = glob.glob(args.dataset+'*.csv')
 # Read the files in the dataset and create setences
 print('Generating tokens from files.')
 # Text Mining Pipeline
+startTime = time.time()
 aggregated_files = open(args.destFile, "w")
 
 for f in train_files[0:int(len(train_files)*0.8)]:
@@ -50,4 +60,14 @@ for f in train_files[int(len(train_files)*0.8):]:
         for s in snippets:
             dev_files.write(s)
 
+aggregated_files.close()
 
+dev_files.close()
+
+executionTime = (time.time() - startTime)
+
+result_file = open(args.resultFile, "w")
+
+result_file.write("Preprocessing time: " + str(executionTime))
+
+result_file.close()

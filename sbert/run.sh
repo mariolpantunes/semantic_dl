@@ -46,6 +46,7 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+NANOSECONDS=1000000000
 
 mkdir -p "${RESULTDIR}"
 
@@ -55,10 +56,24 @@ then
 mkdir -p "${RESULTDIR}"/model
 mkdir -p "${RESULTDIR}"/pretrain
 
+echo "Pretraining the model"
+
+start=`date +%s%N`
 python from_scratch/pre_train.py -v $VECTOR_SIZE -p $TRAINPATH -m "${RESULTDIR}"/pretrain/ -t $CORPUS -d $DEVCORPUS
+end=`date +%s%N`
+time=`expr $end - $start`
 
+echo "Pretrain:  $(echo "scale=5; $time/$NANOSECONDS" | bc -l )" >> "${RESULTDIR}"/results.txt
+
+echo "Training the model"
+start=`date +%s%N`
 python train.py -d "${RESULTDIR}"/model/ -m "${RESULTDIR}"/pretrain/ -t $SUP_TRAIN
+end=`date +%s%N`
+time=`expr $end - $start`
 
+echo "Train:  $(echo "scale=5; $time/$NANOSECONDS" | bc -l )" >> "${RESULTDIR}"/results.txt
+
+echo "Evaluating the model"
 python eval.py -m "${RESULTDIR}"/model/ -p $TESTDIR -d "${RESULTDIR}"/results.txt
 
 fi
@@ -77,9 +92,20 @@ then
 mkdir -p "${RESULTDIR}"/model
 mkdir -p "${RESULTDIR}"/pretrain
 
-python pre-trained/pre_train.py -n roberta-base -m "${RESULTDIR}"/pretrain/ -t $CORPUS -d $DEVCORPUS
 
+start=`date +%s%N`
+python pre-trained/pre_train.py -n roberta-base -m "${RESULTDIR}"/pretrain/ -t $CORPUS -d $DEVCORPUS
+end=`date +%s%N`
+time=`expr $end - $start`
+
+echo "Pretrain:  $(echo "scale=5; $time/$NANOSECONDS" | bc -l )" >> "${RESULTDIR}"/results.txt
+
+start=`date +%s%N`
 python train.py -d "${RESULTDIR}"/model/ -m "${RESULTDIR}"/pretrain/ -t $SUP_TRAIN
+end=`date +%s%N`
+time=`expr $end - $start`
+
+echo "Train:  $(echo "scale=5; $time/$NANOSECONDS" | bc -l )" >> "${RESULTDIR}"/results.txt
 
 python eval.py -m "${RESULTDIR}"/model/ -p $TESTDIR -d "${RESULTDIR}"/results.txt
 

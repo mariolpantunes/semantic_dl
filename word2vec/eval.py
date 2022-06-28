@@ -1,6 +1,7 @@
 import glob
 import pandas as pd
 import argparse
+import time
 
 from gensim.models import Word2Vec
 import gensim.downloader as api
@@ -48,31 +49,40 @@ for f in test_files:
     dataset = pd.read_csv(f, header=None).values
     test_dataset.append(dataset)
 
+result = open(args.results_path, 'a')
+
 '''
 Loading/ Training the model.
 '''
 # load model
 print('Loading previously trained model.')
 if args.model_path == "pretrained":
+    startTime = time.time()
     model = api.load("word2vec-google-news-300")
+    result.write("Loading time: " + str(time.time() - startTime) + "\n")
 else:
+    startTime = time.time()
     model = Word2Vec.load(args.model_path).wv
+    result.write("Loading time: " + str(time.time() - startTime) + "\n")
 
 '''
 Testing the model.
 '''
 print('Testing the trained model.')
-result = open(args.results_path, 'w')
+total_time = 0
 
 for d in range(0, len(test_dataset)):
     predictions = []
     result.write("---------- " + str(test_files[d]) + " ----------\n")
     for pair in test_dataset[d]:
+        startTime = time.time()
         if pair[0] in model and pair[1] in model:
             sim = model.similarity(pair[0], pair[1])
+            total_time += time.time() - startTime
             predictions.append(sim)
             result.write(str(sim) + "\n")
         else:
+            total_time += time.time()-startTime
             print("Missing one of the words in the model: ", pair[0], pair[1])
             predictions.append(None)
             result.write("None\n")
@@ -83,3 +93,7 @@ for d in range(0, len(test_dataset)):
     print("Pearson Correlation Coefficient: ", pearsonr(predictions_removed, test_removed)[0])
     result.write("Pearson Correlation Coefficient: "+ str(pearsonr(predictions_removed, test_removed)[0])+"\n")
     result.write("--------------------\n")
+
+result.write("Evaluation time: " + str(total_time) + "\n")
+
+result.close()

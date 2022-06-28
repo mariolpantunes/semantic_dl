@@ -36,6 +36,7 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+NANOSECONDS=1000000000
 
 mkdir -p "${RESULTDIR}"/model
 
@@ -43,7 +44,12 @@ if [ $OPTION -eq 1 ]
 then
 
 echo "Training model from scratch"
+start=`date +%s%N`
 python train.py --train_input $CORPUS --outputFolder "${RESULTDIR}"/model/ --vector_size $VECTOR_SIZE --window_size $WINDOW_SIZE
+end=`date +%s%N`
+time=`expr $end - $start`
+
+echo "Train:  $(echo "scale=5; $time/$NANOSECONDS" | bc -l )" >> "${RESULTDIR}"/results.txt
 
 echo "Evaluating model"
 python eval.py --test_input $TESTDIR --outputFile "${RESULTDIR}"/results.txt -w "${RESULTDIR}"/model/w2v.model

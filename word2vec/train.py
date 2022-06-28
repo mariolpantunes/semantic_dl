@@ -1,5 +1,6 @@
 import json
 import argparse
+import time
 
 from gensim.models import Word2Vec
 

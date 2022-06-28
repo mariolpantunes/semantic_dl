@@ -80,18 +80,20 @@ for d in range(0, len(test_dataset)):
     result.write("---------- " + str(test_files[d]) + " ----------\n")
 
     for pair in test_dataset[d]:
+        startTime = time.time()
         if pair[0] in vectors and pair[1] in vectors:
-            startTime = time.time()
+            
             term_1 = vectors[pair[0]]
             term_2 = vectors[pair[1]]
 
             sim = dot(term_1, term_2)/(norm(term_1)*norm(term_2))
 
-            total_time += (time.time() - startTime)
+            
 
             predictions.append(sim)
             result.write(str(sim) + "\n")
         else:
+            total_time += time.time() - startTime
             print("Missing one of the words in the model: ", pair[0], pair[1])
             predictions.append(None)
             result.write("None\n")

@@ -26,7 +26,16 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+NANOSECONDS=1000000000
 
 mkdir -p "${RESULTDIR}"
 
-python tf-idf.py --train_input $CORPUS --test_input $TESTDIR -o $RESULTDIR -n $NTOPICS
+
+start=`date +%s%N`
+python train.py --train_input $CORPUS -o $RESULTDIR -n $NTOPICS
+end=`date +%s%N`
+time=`expr $end - $start`
+
+echo "Train:  $(echo "scale=5; $time/$NANOSECONDS" | bc -l )" >> "${RESULTDIR}"/results.txt
+
+python eval.py --train_input $CORPUS --test_input $TESTDIR -o $RESULTDIR -l "${RESULTDIR}"/lsi.model -t "${RESULTDIR}"/tf-idf.model

@@ -4,6 +4,7 @@ import numpy as np
 from numpy import dot
 from numpy.linalg import norm
 import glob
+import time
 
 from scipy.stats import pearsonr
 
@@ -34,6 +35,10 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+result = open(args.destFile, 'a')
+
+start_time = time.time()
+
 with open(args.vectors_file, 'r') as f:
     vectors = {}
     for line in f:
@@ -51,6 +56,7 @@ for word, v in vectors.items():
         continue
     W[vocab[word], :] = v
 
+result.write("Vector loading: " + str(time.time()-start_time) + "\n")
 '''
 Read Files to test for similarities
 '''
@@ -63,21 +69,27 @@ for f in test_files:
     dataset = pd.read_csv(f, header=None).values
     test_dataset.append(dataset)
 
-result = open(args.destFile, 'w')
+
+total_time  = 0
 
 for d in range(0, len(test_dataset)):
     predictions = []
 
     result.write("---------- " + str(test_files[d]) + " ----------\n")
     for pair in test_dataset[d]:
+        startTime = time.time()
         if pair[0] in vocab and pair[1] in vocab:
+            
 
             term_1 = W[vocab[pair[0]]]
             term_2 = W[vocab[pair[1]]]
             sim = dot(term_1, term_2)/(norm(term_1)*norm(term_2))
+
+            total_time += time.time() - startTime
             predictions.append(sim)
             result.write(str(sim) + "\n")
         else:
+            total_time += time.time() - startTime
             print("Missing one of the words in the model: ", pair[0], pair[1])
             predictions.append(None)
             result.write("None\n")
@@ -88,3 +100,7 @@ for d in range(0, len(test_dataset)):
     print("Pearson Correlation Coefficient: ", pearsonr(predictions_removed, test_removed)[0])
     result.write("Pearson Correlation Coefficient: "+ str(pearsonr(predictions_removed, test_removed)[0])+"\n")
     result.write("--------------------\n")
+
+result.write("Evaluation time: " + str(total_time) + "\n")
+
+result.close()

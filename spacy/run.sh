@@ -44,7 +44,7 @@ echo "Generating tok2vec vectors"
 python -m spacy pretrain $CONFIGPATH "${RESULTDIR}"/pretrain/ --paths.raw_text $CORPUS
 
 echo "Building model with no further training"
-python -m spacy assemble $CONFIGPATH "${RESULTDIR}"/model/ --paths.init_tok2vec "${RESULTDIR}"/pretrain/modelw0.bin
+python -m spacy assemble $CONFIGPATH "${RESULTDIR}"/model/ --paths.init_tok2vec "${RESULTDIR}"/pretrain/model19.bin
 
 echo "Evaluating the model with the tok2vec pretraining"
 python eval.py -m "${RESULTDIR}"/model/ -p $TESTDIR -d "${RESULTDIR}"/results.txt

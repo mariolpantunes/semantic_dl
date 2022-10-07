@@ -36,10 +36,7 @@ if [ ! -e $PROC_SETENCES ]; then
     python utils/pre_process_w2v.py --dataset $TRAINDIR --destFile $PROC_SETENCES -r "${RESULTDIR}"/tf-idf/pre_process_time.txt
     echo ""
 fi
-#if [ ! -e $SPACY_CORPUS ]; then
-#    echo "Generating Aggregated Corpus for Spacy"
-#    python utils/pre_process_spacy.py --dataset $TRAINDIR --destFile $SPACY_CORPUS
-#fi
+
 if [ ! -e $BERT_CORPUS ]; then
     echo "Generating Aggregated Corpus for BERT"
     mkdir -p "${RESULTDIR}"/bert/
@@ -66,9 +63,6 @@ for i in {0..0}; do # {1..10}
     echo "Running tf-idf"
     (cd tf-idf && ./run.sh -r ../"${RESULTDIR}"/tf-idf/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}"/ -t ../$TESTDIR -c ../$PROC_SETENCES -n ${VECTOR_SIZES[i]})
 
-    #echo "Running spacy"
-    #(cd spacy && ./run.sh -r ../"${RESULTDIR}"/spacy/"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}" -t ../$TESTDIR -c ../$SPACY_CORPUS --config configs/config_"${VECTOR_SIZES[i]}"_"${WINDOW_SIZES[i]}".cfg -o 1)
-
     echo "Running bert"
     (cd sbert && ./run.sh -r ../"${RESULTDIR}"/bert/"${BERT_VECTORS[i]}" -t ../"${TESTDIR}" -c ../"${BERT_CORPUS}" -p ../"${TRAINDIR}" -d ../"${BERT_DEV_CORPUS}" -v ${BERT_VECTORS[i]} -s ../"${SUP_TRAIN}" -o 1)
 done
@@ -77,9 +71,6 @@ echo "Running pre-trained models"
 
 echo "Running bert"
 (cd sbert && ./run.sh -r ../"${RESULTDIR}"/bert/pretrained -t ../"${TESTDIR}" -o 2)
-
-#echo "Running spacy"
-#(cd spacy && ./run.sh -r ../"${RESULTDIR}"/spacy/pretrained -t ../"${TESTDIR}" -o 2)
 
 echo "Running fastText"
 (cd fasttext && ./run.sh -r ../"${RESULTDIR}"/fasttext/pretrained -t ../"${TESTDIR}" -o 2)

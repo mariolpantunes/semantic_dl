@@ -21,5 +21,3 @@
     - put it in glove/pre-trained/
 - Install python libraries
     - pip install -r requirements.txt
-- Download spacy pretrained model
-    - python -m spacy download en_core_web_lg

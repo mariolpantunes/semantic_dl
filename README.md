@@ -38,6 +38,6 @@
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
-##Citation
+## Citation
 
 Teixeira, Rafael & Antunes, Mário & Gomes, Diogo & Aguiar, Rui. (2022). Comparison of Semantic Similarity Models on Constrained Scenarios. Information Systems Frontiers. 10.1007/s10796-022-10350-w. 

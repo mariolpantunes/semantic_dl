@@ -31,7 +31,7 @@
 
 ## Authors
 
-* **Mário Antunes** - [rgtzths](https://github.com/mariolpantunes)
+* **Mário Antunes** - [mariolpantunes](https://github.com/mariolpantunes)
 * **Rafael Teixeira** - [rgtzths](https://github.com/rgtzths)
 
 ## License
